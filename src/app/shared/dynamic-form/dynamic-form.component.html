@@ -1,0 +1,36 @@
+<form [formGroup]="form" (ngSubmit)="submit()" class="form-container">
+  <ng-container *ngFor="let key of form.controls | keyvalue">
+    <ng-container *ngIf="!excludeFields.includes(key.key)">
+      <mat-form-field *ngIf="getInputType(key.key, key.value.value) !== 'checkbox'"
+                      appearance="outline"
+                      class="form-field">
+        <mat-label>{{ key.key }}</mat-label>
+        <input matInput
+               [type]="getInputType(key.key, key.value.value)"
+               [formControlName]="key.key" />
+
+        <mat-error *ngIf="form.get(key.key)?.hasError('required')">
+          {{ key.key }} is required
+        </mat-error>
+        <mat-error *ngIf="form.get(key.key)?.hasError('email')">
+          Invalid email format
+        </mat-error>
+        <mat-error *ngIf="form.get(key.key)?.hasError('min')">
+          Minimum: {{ form.get(key.key)?.getError('min')?.min }}
+        </mat-error>
+        <mat-error *ngIf="form.get(key.key)?.hasError('max')">
+          Maximum: {{ form.get(key.key)?.getError('max')?.max }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-checkbox *ngIf="getInputType(key.key, key.value.value) === 'checkbox'"
+                    [formControlName]="key.key">
+        {{ key.key }}
+      </mat-checkbox>
+    </ng-container>
+  </ng-container>
+
+  <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
+    Submit
+  </button>
+</form>

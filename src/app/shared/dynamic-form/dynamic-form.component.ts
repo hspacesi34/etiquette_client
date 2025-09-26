@@ -6,6 +6,13 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgFor, NgIf, KeyValuePipe } from '@angular/common';
 
+interface FormField {
+  key: string;
+  value: any;
+  type: string;
+  validators: any[];
+}
+
 @Component({
   selector: 'app-dynamic-form',
   templateUrl: './dynamic-form.component.html',
@@ -17,34 +24,44 @@ import { NgFor, NgIf, KeyValuePipe } from '@angular/common';
     MatCheckboxModule,
     ReactiveFormsModule,
     NgFor,
-    NgIf,
-    KeyValuePipe
+    NgIf
   ]
 })
 export class DynamicFormComponent implements OnInit {
-  @Input() model: any = {}; // Object instance, e.g., new User()
-  @Input() excludeFields: string[] = []; // e.g., ['id']
+  @Input() model: any = {};
+  @Input() excludeFields: string[] = [];
   @Output() formSubmit = new EventEmitter<any>();
 
   form!: FormGroup;
+  formFields: FormField[] = []; // Array to maintain order
 
   constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
-    this.form = this.buildForm(this.model);
+    this.buildFormFields();
+    this.form = this.buildForm();
   }
 
-  buildForm(model: any): FormGroup {
+  private buildFormFields(): void {
+    // Get all properties in order they are defined in the model
+    const propertyNames = Object.getOwnPropertyNames(this.model);
+    
+    this.formFields = propertyNames
+      .filter(key => !this.excludeFields.includes(key))
+      .map(key => ({
+        key,
+        value: this.model[key],
+        type: this.getInputType(key, this.model[key]),
+        validators: this.getValidatorsForField(key, this.model[key])
+      }));
+  }
+
+  private buildForm(): FormGroup {
     const formGroup: { [key: string]: any } = {};
 
-    for (const key in model) {
-      if (!model.hasOwnProperty(key) || this.excludeFields.includes(key)) continue;
-
-      const value = model[key];
-      const validators = this.getValidatorsForField(key, value);
-
-      formGroup[key] = [value, validators];
-    }
+    this.formFields.forEach(field => {
+      formGroup[field.key] = [field.value, field.validators];
+    });
 
     return this.fb.group(formGroup);
   }

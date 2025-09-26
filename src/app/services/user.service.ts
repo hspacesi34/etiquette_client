@@ -16,7 +16,7 @@ export class UserService {
     const headers = new HttpHeaders({
         'Content-Type': 'application/json'
       });
-    return this.http.post<User>(this.apiLink+'/signin', JSON.stringify(user), {headers});
+    return this.http.post<User>(this.apiLink+'/signin', JSON.stringify(user), {headers, withCredentials: true});
   }
 
   login(user: User): Observable<User> {

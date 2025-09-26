@@ -7,7 +7,7 @@
         <mat-label>{{ key.key }}</mat-label>
         <input matInput
                [type]="getInputType(key.key, key.value.value)"
-               [formControlName]="key.key" />
+               [formControlName]="key.key" required/>
 
         <mat-error *ngIf="form.get(key.key)?.hasError('required')">
           {{ key.key }} is required

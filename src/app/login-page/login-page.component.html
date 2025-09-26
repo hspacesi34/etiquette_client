@@ -1,0 +1,4 @@
+<main>
+    <app-dynamic-form [model]="user" [excludeFields]="['id', 'firstname', 'lastname']" (formSubmit)="loginUser($event)"></app-dynamic-form>
+    <br/><a [routerLink]="['/signin']">Créer un compte</a>
+</main>

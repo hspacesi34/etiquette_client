@@ -2,7 +2,6 @@ import { Component } from "@angular/core";
 import { DynamicFormComponent } from "../shared/dynamic-form/dynamic-form.component";
 import { User } from "../models/user.model";
 import { UserService } from "../services/user.service";
-import { log } from "node:console";
 
 @Component({
   selector: 'app-signin-page',

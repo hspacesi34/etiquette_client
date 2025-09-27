@@ -17,5 +17,12 @@ export class BoardService {
           'Content-Type': 'application/json'
         });
       return this.http.post<Board>(this.apiLink+'/add', JSON.stringify(board), {headers, withCredentials: true});
-    }
+  }
+
+  allBoardsByUser(): Observable<Board> {
+      const headers = new HttpHeaders({
+          'Content-Type': 'application/json'
+        });
+      return this.http.get<Board>(this.apiLink+'/allByUser', {headers, withCredentials: true});
+  }
 }

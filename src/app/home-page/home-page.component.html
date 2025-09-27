@@ -1,6 +1,9 @@
 <main>
   <h1>Bienvenue sur Etiquette</h1>
   <p>Site en construction</p>
-
   <button matButton (click)="openDialog()">Créer une board</button>
+  
+  <div *ngFor="let board of boardsByUser" class="board-item">
+    <p>{{ board.name }}</p>
+  </div>
 </main>

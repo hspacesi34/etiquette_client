@@ -5,11 +5,12 @@ import { DynamicFormComponent } from '../shared/dynamic-form/dynamic-form.compon
 import { Board } from '../models/board.model';
 import { BoardService } from '../services/board.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { NgFor } from '@angular/common';
 
 @Component({
   selector: 'app-home-page',
   standalone: true,
-  imports: [],
+  imports: [NgFor],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.scss'
 })
@@ -17,8 +18,21 @@ export class HomePageComponent {
   readonly dialog = inject(MatDialog);
   board = new Board();
   private _snackBar = inject(MatSnackBar);
+  boardsByUser: Board[] = [];
   
   constructor(private boardService: BoardService) {}
+
+  ngOnInit() {
+    this.boardService.allBoardsByUser().subscribe({
+      next: (response: any) => {
+        console.log('Boards fetched successfully:', response);
+        this.boardsByUser = response.models;
+      },
+      error: (error: any) => {
+        
+      }
+    });
+  }
 
   openSnackBar(response: string) {
       return this._snackBar.open(response, "close", { duration: 3000 });

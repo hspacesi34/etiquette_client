@@ -28,7 +28,9 @@ export class AppComponent {
       .subscribe(event => {
         const navEnd = event as NavigationEnd;
 
-        if (navEnd.urlAfterRedirects != "/" && navEnd.urlAfterRedirects != "/login" && navEnd.urlAfterRedirects != "/signin") {
+        if (navEnd.urlAfterRedirects != "/" && navEnd.urlAfterRedirects != "/login" && navEnd.urlAfterRedirects != "/signin"
+          && navEnd.urlAfterRedirects != "/board"
+        ) {
           this.userService.isTokenValid().subscribe({
               next: () => {
                 

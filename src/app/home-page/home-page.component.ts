@@ -6,11 +6,13 @@ import { Board } from '../models/board.model';
 import { BoardService } from '../services/board.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgFor } from '@angular/common';
+import { RouterLink } from "@angular/router";
+import { skip, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-home-page',
   standalone: true,
-  imports: [NgFor],
+  imports: [NgFor, RouterLink],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.scss'
 })
@@ -19,10 +21,24 @@ export class HomePageComponent {
   board = new Board();
   private _snackBar = inject(MatSnackBar);
   boardsByUser: Board[] = [];
+  private boardService = inject(BoardService);
+  private refreshSubscription: Subscription = new Subscription();
   
-  constructor(private boardService: BoardService) {}
+  constructor() {}
 
   ngOnInit() {
+    // Load initial data
+    this.loadBoards();
+
+    // Subscribe to refresh events, skip the initial emission
+    this.refreshSubscription = this.boardService.refreshNeeded$
+      .pipe(skip(1))  // Skip the initial emission
+      .subscribe(() => {
+        this.loadBoards();
+    });
+  }
+
+  loadBoards() {
     this.boardService.allBoardsByUser().subscribe({
       next: (response: any) => {
         console.log('Boards fetched successfully:', response);
@@ -45,7 +61,7 @@ export class HomePageComponent {
         componentType: DynamicFormComponent,
         componentInputs: {
           model: this.board,
-          excludeFields: ['userOwner'],
+          excludeFields: ['id', 'userOwner'],
         },
         componentOutputs: {
           formSubmit: ($event: any) => {
@@ -56,24 +72,25 @@ export class HomePageComponent {
       }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        console.log('Form submitted:', result);
-      }
-    });
-
   }
+
   createBoard(board: Board) {
-    console.log(board);
     this.boardService.addBoard(board).subscribe({
       next: (response: any) => {
         console.log('Board created successfully:', response);
         this.openSnackBar(response.message);
+        this.boardService.refreshBoards();
       },
       error: (error: any) => {
         console.error('Error creating board:', error);
         this.openSnackBar(error.error.error);
       }
     });
+  }
+
+  ngOnDestroy() {
+    if (this.refreshSubscription) {
+      this.refreshSubscription.unsubscribe();
+    }
   }
 }

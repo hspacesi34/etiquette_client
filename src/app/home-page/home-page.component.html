@@ -4,6 +4,6 @@
   <button matButton (click)="openDialog()">Créer une board</button>
   
   <div *ngFor="let board of boardsByUser" class="board-item">
-    <p>{{ board.name }}</p>
+    <p><a [routerLink]="['/board/']+board.id.toString()">{{ board.name }}</a></p>
   </div>
 </main>

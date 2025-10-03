@@ -1,16 +1,26 @@
 import { Injectable } from '@angular/core';
 import { Board } from '../models/board.model';
-import { Observable } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BoardService {
-
-  private apiLink = "http://localhost:8080/board";
+  private refreshBoardsSubject = new BehaviorSubject<void>(undefined);
+  private apiLink = "/api/board";
 
   constructor(private http: HttpClient) { }
+
+  // Method to trigger refresh
+  refreshBoards() {
+    this.refreshBoardsSubject.next();
+  }
+
+  // Observable that components can subscribe to
+  get refreshNeeded$() {
+    return this.refreshBoardsSubject.asObservable();
+  }
 
   addBoard(board: Board): Observable<Board> {
       const headers = new HttpHeaders({
@@ -24,5 +34,12 @@ export class BoardService {
           'Content-Type': 'application/json'
         });
       return this.http.get<Board>(this.apiLink+'/allByUser', {headers, withCredentials: true});
+  }
+
+  getOneBoard(id: string): Observable<Board> {
+    const headers = new HttpHeaders({
+          'Content-Type': 'application/json'
+        },);
+      return this.http.get<Board>(this.apiLink+'/one', {headers, params: new HttpParams().set('id', id)});
   }
 }

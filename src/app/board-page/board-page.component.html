@@ -1,3 +1,6 @@
+<div class="createColumn">
+    <button mat-button (click)="openDialog()">Créer une colonne</button>
+</div>
 <div class="boardColumns">
     <div class="column" *ngFor="let column of boardColumns">
         <app-board-column [boardColumn]="column"></app-board-column>

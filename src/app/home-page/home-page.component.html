@@ -1,9 +1,10 @@
-<main>
+<main class="homepage">
   <h1>Bienvenue sur Etiquette</h1>
   <p>Site en construction</p>
-  <button matButton (click)="openDialog()">Créer une board</button>
+  <button mat-raised-button color="primary" (click)="openDialog()">Créer une board</button>
   
   <div *ngFor="let board of boardsByUser" class="board-item">
     <p><a [routerLink]="['/board/']+board.id.toString()">{{ board.name }}</a></p>
   </div>
+
 </main>

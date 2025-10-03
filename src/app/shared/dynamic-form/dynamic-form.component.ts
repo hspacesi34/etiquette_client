@@ -5,6 +5,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgFor, NgIf, KeyValuePipe } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
 
 interface FormField {
   key: string;
@@ -22,6 +23,7 @@ interface FormField {
     MatFormFieldModule,
     MatInputModule,
     MatCheckboxModule,
+    MatButtonModule,
     ReactiveFormsModule,
     NgFor,
     NgIf

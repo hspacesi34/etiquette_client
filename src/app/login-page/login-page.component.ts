@@ -4,11 +4,12 @@ import { UserService } from '../services/user.service';
 import { User } from '../models/user.model';
 import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
 import { Router, RouterLink } from '@angular/router';
+import { MatButton } from "@angular/material/button";
 
 @Component({
   selector: 'app-login-page',
   standalone: true,
-  imports: [DynamicFormComponent, MatSnackBarModule, RouterLink],
+  imports: [DynamicFormComponent, MatSnackBarModule, RouterLink, MatButton],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.scss'
 })

@@ -8,11 +8,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { NgFor } from '@angular/common';
 import { RouterLink } from "@angular/router";
 import { skip, Subscription } from 'rxjs';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-home-page',
   standalone: true,
-  imports: [NgFor, RouterLink],
+  imports: [NgFor, RouterLink, MatButtonModule],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.scss'
 })

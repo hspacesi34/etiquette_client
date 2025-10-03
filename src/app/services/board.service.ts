@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Board } from '../models/board.model';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -34,5 +34,12 @@ export class BoardService {
           'Content-Type': 'application/json'
         });
       return this.http.get<Board>(this.apiLink+'/allByUser', {headers, withCredentials: true});
+  }
+
+  getOneBoard(id: string): Observable<Board> {
+    const headers = new HttpHeaders({
+          'Content-Type': 'application/json'
+        },);
+      return this.http.get<Board>(this.apiLink+'/one', {headers, params: new HttpParams().set('id', id)});
   }
 }

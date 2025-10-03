@@ -1,0 +1,17 @@
+.boardColumns {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;  /* ✅ centers the children horizontally */
+  align-items: flex-start;  /* optional: aligns columns to top */
+  gap: 20px;
+  padding: 16px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.column {
+  flex: 1 1 300px;           /* grows and shrinks with min width of 300px */
+  max-width: 400px;          /* optional: limits max width */
+  min-width: 280px;          /* prevents columns from getting too small */
+  box-sizing: border-box;
+}
